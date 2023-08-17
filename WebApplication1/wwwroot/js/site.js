@@ -2,42 +2,108 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-function goods() {
-	let goods = [];
-	this.S = async function (url, parms, succ, err) {
 
-	//	Connector.Ajax(JSON.stringify({ id: 1461, name: "3ss====>" }), "goods", "", "", "PUT")
+/*window.addEventListener("load", (e) => {
+	try {
+		//if (GURL)
+		Connector.GMODEL.fillAll();
 	}
-	this.D = function () {
-		//	Connector.Ajax(JSON.stringify({ id: 1461, name: "3ss====>" }), "goods", "", "", "PUT")
+	catch (e) {
+		console.log(e, ">>");
 	}
-	this.IU = function () {
-		//	Connector.Ajax(JSON.stringify({ id: 1461, name: "3ss====>" }), "goods", "", "", "PUT")
-	}
+}
+);*/
 
-};
-function Connector() {
+DevExpress.localization.locale(navigator.language);
+function model() {
+	let obj = this;
+	this.goods = [];
+	this.pharms = [];
+	this.stores = [];
+	this.lots = [];
+
+	this.fillAll = async function () {
+		await obj.S("goods");
+		await obj.S("pharms");
+		await obj.S("stores");
+		await obj.S("lots");
+	};
+
+	this.S = async function (what = "", parms = {}) {
+		let res;
+		try {
+			res = await Connector.Ajax(JSON.stringify(parms), what, "GET");
+			if (!res.success) {
+				console.log(res); alertify.error(res.description);
+			} else {
+				obj[what] = Connector.FromJson(res.payload);
+			}
+		} catch (e) {
+			res.success = false;
+			res.description = e.description;
+			res.payload = [];
+			console.log(e); alertify.error(e.message);
+		}
+		return res;
+	};
+	this.D = async function (what = "", id) {
+		let res;
+		try {
+			res = await Connector.Ajax(JSON.stringify({ id: id }), what, "DELETE");
+			if (!res.success) {
+				console.log(res); alertify.error(res.description);
+			} else {
+				Connector.DeleteRecordById(obj[what], id);
+			}
+		}
+		catch (e) {
+			res.success = false;
+			res.description = e.description;
+			res.payload = [];
+			console.log(e); alertify.error(e.message);
+		}
+		return res;
+	};
+	this.IU = async function (what = "", parm) {
+		let res;
+		try {
+			res = await Connector.Ajax(JSON.stringify(parm), what, "PUT");
+			if (!res.success) {
+				console.log(res); alertify.error(res.description);
+			} else {
+				Connector.updateRecordById(obj[what], parm.id, res.payload[0]);
+			}
+		}
+		catch (e) {
+			res.success = false;
+			res.description = e.description;
+			res.payload = [];
+			console.log(e); alertify.error(e.message);
+		}
+		return res;
+	}
 }
 
-Connector.Ajax = function (parm, url, succ, error = (x) => alertify.error(x.message), method = "POST") {
-	$.ajax(window.GURL + url, {
-		data: parm,
-			type: method
-		}).done(function (result) {
-			if (succ && typeof succ === 'function') {
-				succ(Connector.FromJson(result));
-			} else {
-				console.log("нет Делегата!>>>	", Connector.FromJson(result));
-			}
-		}).fail(function (e) {
-			if (e.message === null || e.message === undefined) e.message = 'Произошла ошибка выполнения запроса';
-			console.log(e.message);
-			if (error && typeof (error) === 'function') {
-				error(e);
-			}
-		});
-	}
-Connector.FromJson = function(v) {
+function Connector() {
+	};
+
+Connector.GMODEL = new model();
+	Connector.Ajax = async function (parm, url, method = "POST") {
+		let res = { success: true, description: "", code: 0, payload: [] };
+		try {
+			res = await $.ajax(GURL + url, {
+				data: parm,
+				type: method
+			});
+		} catch (e) {
+			res.success = false;
+			res.description = e.description;
+			res.payload = [];
+		}
+		return res;
+	};
+
+	Connector.FromJson = function (v) {
 		if ((typeof v === 'string') && ((v.indexOf("{") >= 0) || (v.indexOf("[") >= 0) || (v.indexOf(":") >= 0))) {
 			try {
 				return JSON.parse(v);
@@ -48,4 +114,53 @@ Connector.FromJson = function(v) {
 		} else {
 			return v;
 		}
+	};
+	Connector.DeleteRecordById = function (arr, elementId) {
+		ret = false;
+		let i = arr.findIndex((x) => x.id == elementId);
+		if (i && i >= 0) {
+			ret = true;
+			arr.splice(i, 1);
+		}
+		return ret;
+	};
+	Connector.updateRecordById = function (arr, elementId, value) {
+		ret = false;
+		if (elementId == null) {
+			ret = true;
+			arr.push(value);
+			return ret;
+		}
+		else {
+			let i = arr.findIndex((x) => x.id == elementId);
+			if (i && i >= 0) {
+				ret = true;
+				arr[i] = value;
+			}
+		}
+		return ret;
+	};
+Connector.UnionDataForUpdate = function (change, src){
+
+	for (let _ = Object.keys(src) - 1; _ >= 0; _--) {
+		if (change[Object.keys(src)[_]]) {
+			src[Object.keys(src)[_]] = chandge[Object.keys(src)[_]];
+		}
 	}
+	return src;
+};
+Connector.operateRecordForUpdate = function (array, change, key)
+{
+	let src = null;
+	let i = array.findIndex((x) => x.id == key);
+	if (i >= 0) {
+		src = array[i];
+	}
+	if (src) {
+		for (let _ = Object.keys(src).length - 1; _ >= 0; _--) {
+			if (change && change[Object.keys(src)[_]]) {
+				src[Object.keys(src)[_]] = change[Object.keys(src)[_]];
+			}
+		}
+	} return src;
+}

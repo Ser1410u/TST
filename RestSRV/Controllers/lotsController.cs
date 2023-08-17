@@ -21,21 +21,11 @@ namespace RestSRV.Controllers
             _conf = conf;
         }
         [HttpGet]
-        public Result<Lot> Get(int pharmID, int storeId, int goodId)
+        public Result<Lot> Get()
         {
-            try
-            {
-                List<SqlParameter> parms = new List<SqlParameter>();
-                if (pharmID >= 0) parms.Add(new SqlParameter("pharmID", pharmID));
-                if (storeId >= 0) parms.Add(new SqlParameter("storeId", pharmID));
-                if (goodId >= 0) parms.Add(new SqlParameter("goodId", pharmID));
+            List<SqlParameter> parms = new List<SqlParameter>();
 
-                return DataEngine.S<Lot>(_logger, _conf["ConnectionString"] ?? "", "S_Lots", parms.ToArray());
-            }
-            catch (Exception err)
-            {
-                return new Result<Lot>() { Success = false, Code = err.HResult, Description = err.Message };
-            }
+            return DataEngine.S<Lot>(_logger, _conf["ConnectionString"]??"", "S_Lots", parms.ToArray());
         }
         [HttpDelete]
         public Result<Lot> Delete()

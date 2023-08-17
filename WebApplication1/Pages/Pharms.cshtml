@@ -1,0 +1,16 @@
+﻿@page
+@model PharmsModel
+@{
+    ViewData["Title"] = "Аптеки";
+    ViewBag.RESTURL = Model.RESTURL;
+}
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <div id="listContainer">
+    </div>
+    <div id="grid"></div>
+</div>
+<script src="~/js/Pharms.js" asp-append-version="true"></script>
+<script>
+    GURL = '@ViewBag.RESTURL';
+</script>

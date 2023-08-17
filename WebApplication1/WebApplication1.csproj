@@ -7,7 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\jsgrid\" />
+    <Content Remove="wwwroot\js\Lots.js" />
+    <Content Remove="wwwroot\js\Pharms.js" />
+    <Content Remove="wwwroot\js\Stores.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Pages\Goods.cshtml.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\js\Lots.js" />
+    <EmbeddedResource Include="wwwroot\js\Stores.js" />
+    <EmbeddedResource Include="wwwroot\js\Pharms.js" />
+    <EmbeddedResource Include="wwwroot\js\Goods.js" />
   </ItemGroup>
 
 </Project>

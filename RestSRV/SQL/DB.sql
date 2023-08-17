@@ -45,7 +45,7 @@ create table Pharms(
 	id		int								identity (0,1)	primary key
 ,	name	nvarchar(250)					unique
 ,	address	nvarchar(250)					null
-,	phone	nchar(10)						null
+,	phone	nvarchar(16)					null
 ,	constraint	uPharms_AllFields						unique	(name, address, phone)
 )
 
@@ -179,7 +179,7 @@ create proc IU_Pharms
 (	@id			int
 ,	@name		nvarchar(250)		
 ,	@address	nvarchar(250)		
-,	@phone		nchar(10)			
+,	@phone		nchar(16)			
 )
 as
 if(@id is null)

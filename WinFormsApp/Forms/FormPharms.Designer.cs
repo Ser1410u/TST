@@ -30,7 +30,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             dataGridView1 = new DataGridView();
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             nameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -58,9 +58,11 @@
             dataGridView1.Size = new Size(800, 450);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellBeginEdit += dataGridView1_CellBeginEdit;
+            dataGridView1.CellEndEdit += dataGridView1_CellEndEdit;
             dataGridView1.DataError += dataGridView1_DataError;
             dataGridView1.EditingControlShowing += dataGridView1_EditingControlShowing;
             dataGridView1.RowValidated += dataGridView1_RowValidated;
+            dataGridView1.Scroll += dataGridView1_Scroll;
             dataGridView1.UserDeletedRow += dataGridView1_UserDeletedRow;
             // 
             // idDataGridViewTextBoxColumn
@@ -90,9 +92,9 @@
             // phone
             // 
             phone.DataPropertyName = "phone";
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            phone.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "+7(###) ###-####";
+            dataGridViewCellStyle2.NullValue = null;
+            phone.DefaultCellStyle = dataGridViewCellStyle2;
             phone.HeaderText = "телефон";
             phone.Name = "phone";
             // 

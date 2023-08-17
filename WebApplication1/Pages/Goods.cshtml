@@ -2,13 +2,18 @@
 @model GoodsModel
 @{
     ViewData["Title"] = "Товары";
+    ViewBag.RESTURL = Model.RESTURL;
 }
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
+<div class="grid-container">
+    <div id="listContainer">
+
+    </div>
+    <div id="grid"></div>
+</div>
+<script src="~/js/Goods.js" asp-append-version="true"></script>
 <script>
-    onload = (event) => { 
-
-    };
-
-</script>
+    GURL = '@ViewBag.RESTURL';
+ </script>

@@ -21,12 +21,11 @@ namespace RestSRV.Controllers
             _conf = conf;
         }
         [HttpGet]
-        public Result<Store> Get(int pharmID)
+        public Result<Store> Get()
         {
             try
             {
-                SqlParameter[] parms = pharmID >= 0 ? new SqlParameter[] { new SqlParameter("pharmID", pharmID) } : Array.Empty<SqlParameter>();
-                return DataEngine.S<Store>(_logger, _conf["ConnectionString"] ?? "", "S_Stores", parms);
+                return DataEngine.S<Store>(_logger, _conf["ConnectionString"] ?? "", "S_Stores", Array.Empty<SqlParameter>());
             }
             catch (Exception err)
             {

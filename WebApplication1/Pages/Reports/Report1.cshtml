@@ -1,0 +1,12 @@
+﻿@page
+@model Reolort1Model
+@{
+    ViewData["Title"] = "Cписок партии выбранного склада";
+    ViewBag.RESTURL = Model.RESTURL;
+}
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+</div>
+<script>
+    GURL = '@ViewBag.RESTURL';
+</script>

@@ -44,7 +44,7 @@ namespace RestSRV.Controllers
         {
             try
             {
-                return DataEngine.S<Good>(_logger, _conf["ConnectionString"] ?? "", "S_Goods", new SqlParameter[0]);
+                return DataEngine.S<Good>(_logger, _conf["ConnectionString"] ?? "", "S_Goods", Array.Empty<SqlParameter>());
             }
             catch (Exception err)
             {

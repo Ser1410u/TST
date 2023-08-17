@@ -19,6 +19,7 @@ namespace WFApp.Forms
     public partial class FormPharms : Form
     {
 
+        private MaskedTextBox maskedTextBox;
         private DataTable dt = new DataTable();
         public FormPharms()
         {
@@ -44,6 +45,22 @@ namespace WFApp.Forms
             {
                 if (!Settings.Default.canEditRows)
                     e.Cancel = ((sender as DataGridView).DataSource as DataTable).Rows.Count > e.RowIndex;
+
+                if (e.ColumnIndex == this.dataGridView1.Columns["phone"].Index && e.RowIndex < this.dataGridView1.NewRowIndex)
+                {
+                    this.maskedTextBox.Mask = "+7(###) ###-####";
+                    Rectangle rect =
+                       this.dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
+                    this.maskedTextBox.Location = rect.Location;
+                    this.maskedTextBox.Size = rect.Size;
+                    this.maskedTextBox.Text = "";
+                    if (this.dataGridView1[e.ColumnIndex, e.RowIndex].Value != null)
+                    {
+                        this.maskedTextBox.Text = this.dataGridView1[e.ColumnIndex,
+                            e.RowIndex].Value.ToString();
+                    }
+                    this.maskedTextBox.Visible = true;
+                }
             }
             catch
             {
@@ -100,6 +117,12 @@ namespace WFApp.Forms
 
         private void FormGoods_Load(object sender, EventArgs e)
         {
+            this.maskedTextBox = new MaskedTextBox();
+
+            this.maskedTextBox.Visible = false;
+
+            this.dataGridView1.Controls.Add(this.maskedTextBox);
+
             S();
         }
 
@@ -150,7 +173,7 @@ namespace WFApp.Forms
 
         private void Column3_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) || (sender as TextBox).Text.Length>=10)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) || (sender as TextBox).Text.Length >= 16)
             {
                 e.Handled = true;
             }
@@ -166,6 +189,32 @@ namespace WFApp.Forms
             var dtt = dt.Select("", "", DataViewRowState.Deleted);
             foreach (DataRow w in dtt)
                 D(w);
+        }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (this.maskedTextBox.Visible)
+            {
+                this.dataGridView1.CurrentCell.Value = this.maskedTextBox.Text;
+                this.maskedTextBox.Visible = false;
+            }
+        }
+
+        private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (this.maskedTextBox.Visible)
+
+            {
+
+                Rectangle rect = this.dataGridView1.GetCellDisplayRectangle(
+
+                    this.dataGridView1.CurrentCell.ColumnIndex,
+
+                    this.dataGridView1.CurrentCell.RowIndex, true);
+
+                this.maskedTextBox.Location = rect.Location;
+
+            }
         }
     }
 }
