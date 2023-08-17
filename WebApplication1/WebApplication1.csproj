@@ -9,6 +9,8 @@
   <ItemGroup>
     <Content Remove="wwwroot\js\Lots.js" />
     <Content Remove="wwwroot\js\Pharms.js" />
+    <Content Remove="wwwroot\js\Report1.js" />
+    <Content Remove="wwwroot\js\Report2.js" />
     <Content Remove="wwwroot\js\Stores.js" />
   </ItemGroup>
 
@@ -17,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="wwwroot\js\Report2.js" />
+    <EmbeddedResource Include="wwwroot\js\Report1.js" />
     <EmbeddedResource Include="wwwroot\js\Lots.js" />
     <EmbeddedResource Include="wwwroot\js\Stores.js" />
     <EmbeddedResource Include="wwwroot\js\Pharms.js" />

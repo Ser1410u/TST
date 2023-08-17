@@ -121,14 +121,14 @@ goodId  = coalesce(@goodId,goodId)
 go
 
 create proc GET_GoodsByPharm
-(@pharmID int)
+(@pharmID int = null)
 as
-select g.name, sum(l.q) as N   
+select p.ID, g.name, sum(l.q) as N   
 from Pharms p
 join Lots l on l.pharmID = p.id
 join Goods g on g.id = l.goodId
-where p.ID = @pharmID
-group by g.name
+where p.ID = coalesce(@pharmID,p.ID)
+group by g.name,p.ID
 go
 
 create proc D_Lots

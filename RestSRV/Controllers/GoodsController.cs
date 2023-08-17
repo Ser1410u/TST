@@ -22,11 +22,12 @@ namespace RestSRV.Controllers
             _conf = conf;
         }
         [HttpGet("GoodsByPharm")]
-        public Result<GoodByPharm> GET_GoodsByPharm(int id)
+        public Result<GoodByPharm> GET_GoodsByPharm()
         {
             try
             {
-                return DataEngine.S<GoodByPharm>(_logger, _conf["ConnectionString"] ?? "", "GET_GoodsByPharm", new SqlParameter[] { new SqlParameter("@pharmID", id) });
+                //return DataEngine.S<GoodByPharm>(_logger, _conf["ConnectionString"] ?? "", "GET_GoodsByPharm", new SqlParameter[] { new SqlParameter("@pharmID", id) });
+                return DataEngine.S<GoodByPharm>(_logger, _conf["ConnectionString"] ?? "", "GET_GoodsByPharm", Array.Empty<SqlParameter>()); 
             }
             catch (Exception err)
             {

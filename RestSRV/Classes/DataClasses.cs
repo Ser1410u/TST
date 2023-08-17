@@ -81,6 +81,7 @@ namespace RestSRV.Classes
 
     public class GoodByPharm
     {
+        public int ID {get; set;}
         public required string  name { set; get; }
         public required int     N { set; get; }
     }
