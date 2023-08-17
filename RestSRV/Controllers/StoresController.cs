@@ -23,33 +23,52 @@ namespace RestSRV.Controllers
         [HttpGet]
         public Result<Store> Get(int pharmID)
         {
-            SqlParameter[] parms = pharmID >= 0 ? new SqlParameter[] { new SqlParameter("pharmID", pharmID) }: Array.Empty<SqlParameter>();
-            return DataEngine.S<Store>(_logger, _conf["ConnectionString"]??"", "S_Stores", parms);
+            try
+            {
+                SqlParameter[] parms = pharmID >= 0 ? new SqlParameter[] { new SqlParameter("pharmID", pharmID) } : Array.Empty<SqlParameter>();
+                return DataEngine.S<Store>(_logger, _conf["ConnectionString"] ?? "", "S_Stores", parms);
+            }
+            catch (Exception err)
+            {
+                return new Result<Store>() { Success = false, Code = err.HResult, Description = err.Message };
+            }
         }
         [HttpDelete]
         public Result<Store> Delete()
         {
-            using (var reader = new StreamReader(Request.Body))
+            try
             {
-                var ppp = JsonSerializer.Deserialize<tstDataBase>(reader.ReadToEndAsync().Result);
-                return DataEngine.D<Store>(_logger, _conf["ConnectionString"] ?? "", "D_Stores", new SqlParameter[] { new SqlParameter("id", ppp.id)});
+                using (var reader = new StreamReader(Request.Body))
+                {
+                    var ppp = JsonSerializer.Deserialize<tstDataBase>(reader.ReadToEndAsync().Result);
+                    return DataEngine.D<Store>(_logger, _conf["ConnectionString"] ?? "", "D_Stores", new SqlParameter[] { new SqlParameter("id", ppp.id) });
+                }
             }
-
+            catch (Exception err)
+            {
+                return new Result<Store>() { Success = false, Code = err.HResult, Description = err.Message };
+            }
         }
         [HttpPut]
         public Result<Store> Put()
         {
-            using (var reader = new StreamReader(Request.Body))
+            try
             {
-                var ppp = JsonSerializer.Deserialize<Store>(reader.ReadToEndAsync().Result);
+                using (var reader = new StreamReader(Request.Body))
+                {
+                    var ppp = JsonSerializer.Deserialize<Store>(reader.ReadToEndAsync().Result);
 
-                return DataEngine.IU<Store>(_logger, _conf["ConnectionString"] ?? "", "IU_Stores", new SqlParameter[] { 
+                    return DataEngine.IU<Store>(_logger, _conf["ConnectionString"] ?? "", "IU_Stores", new SqlParameter[] {
                                                                                                       new SqlParameter("id", ppp.id is null? DBNull.Value:ppp.id)
-                                                                                                    , new SqlParameter("pharmID", ppp.pharmID) 
-                                                                                                    , new SqlParameter("name", ppp.name) 
+                                                                                                    , new SqlParameter("pharmID", ppp.pharmID)
+                                                                                                    , new SqlParameter("name", ppp.name)
                                                                                                                       });
+                }
             }
-
+            catch (Exception err)
+            {
+                return new Result<Store>() { Success = false, Code = err.HResult, Description = err.Message };
+            }
         }
     }
 }

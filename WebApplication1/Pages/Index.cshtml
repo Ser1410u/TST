@@ -2,8 +2,13 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Задание 1 (веб)";
+    ViewBag.RESTURL = Model.RESTURL;
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
+<script>
+
+    window.GURL = '@ViewBag.RESTURL';
+</script>

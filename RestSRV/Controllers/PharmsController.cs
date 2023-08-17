@@ -23,32 +23,52 @@ namespace RestSRV.Controllers
         [HttpGet]
         public Result<Pharm> Get()
         {
-            return DataEngine.S<Pharm>(_logger, _conf["ConnectionString"]??"", "S_Pharms", Array.Empty<SqlParameter>());
+            try
+            {
+                return DataEngine.S<Pharm>(_logger, _conf["ConnectionString"] ?? "", "S_Pharms", Array.Empty<SqlParameter>());
+            }
+            catch (Exception err)
+            {
+                return new Result<Pharm>() { Success = false, Code = err.HResult, Description = err.Message };
+            }
         }
         [HttpDelete]
         public Result<Pharm> Delete()
         {
-            using (var reader = new StreamReader(Request.Body))
+            try
             {
-                var ppp = JsonSerializer.Deserialize<tstDataBase>(reader.ReadToEndAsync().Result);
-                return DataEngine.D<Pharm>(_logger, _conf["ConnectionString"] ?? "", "D_Pharms", new SqlParameter[] { new SqlParameter("id", ppp.id)});
+                using (var reader = new StreamReader(Request.Body))
+                {
+                    var ppp = JsonSerializer.Deserialize<tstDataBase>(reader.ReadToEndAsync().Result);
+                    return DataEngine.D<Pharm>(_logger, _conf["ConnectionString"] ?? "", "D_Pharms", new SqlParameter[] { new SqlParameter("id", ppp.id) });
+                }
+            }
+            catch (Exception err)
+            {
+                return new Result<Pharm>() { Success = false, Code = err.HResult, Description = err.Message };
             }
 
         }
         [HttpPut]
         public Result<Pharm> Put()
         {
-            using (var reader = new StreamReader(Request.Body))
+            try
             {
-                var ppp = JsonSerializer.Deserialize<Pharm>(reader.ReadToEndAsync().Result);
+                using (var reader = new StreamReader(Request.Body))
+                {
+                    var ppp = JsonSerializer.Deserialize<Pharm>(reader.ReadToEndAsync().Result);
 
-                return DataEngine.IU<Pharm>(_logger, _conf["ConnectionString"] ?? "", "IU_Pharms", new SqlParameter[] 
-                                                                                                    { new SqlParameter("id", ppp.id is null? DBNull.Value:ppp.id)
+                    return DataEngine.IU<Pharm>(_logger, _conf["ConnectionString"] ?? "", "IU_Pharms", new SqlParameter[]
+                                                                                                        { new SqlParameter("id", ppp.id is null? DBNull.Value:ppp.id)
                                                                                                     , new SqlParameter("name", ppp.name)
                                                                                                     , new SqlParameter("address", ppp.address)
                                                                                                     , new SqlParameter("phone", ppp.phone) });
+                }
             }
-
+            catch (Exception err)
+            {
+                return new Result<Pharm>() { Success = false, Code = err.HResult, Description = err.Message };
+            }
         }
     }
 }
